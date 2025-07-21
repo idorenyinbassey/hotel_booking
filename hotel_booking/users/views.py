@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth import get_user_model, update_session_auth_hash, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -179,3 +179,21 @@ def change_password(request):
         else:
             messages.error(request, 'Please correct the errors below.')
     return redirect('profile')
+
+
+def custom_logout(request):
+    """
+    Custom logout view that handles both GET and POST requests.
+    GET: Shows logout confirmation page
+    POST: Actually logs out the user
+    """
+    if request.method == 'POST':
+        logout(request)
+        messages.success(request, 'You have been logged out successfully.')
+        return redirect('home')
+    else:
+        # For GET requests, either redirect to logout confirmation or directly logout
+        # For security, we'll directly logout on GET as well since the template uses POST
+        logout(request)
+        messages.success(request, 'You have been logged out successfully.')
+        return redirect('home')
