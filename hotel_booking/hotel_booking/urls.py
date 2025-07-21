@@ -9,10 +9,18 @@ urlpatterns = [
     path('api/bookings/', include('bookings.urls')),
     path('api/hotels/', include('hotels.urls')),
     path('api/users/', include('users.urls')),
+    path('accounts/', include('users.urls')),  # User auth and profile
+    path('hotels/', include('hotels.urls')),  # Hotel web views
     path('', include('core.urls')),  # Frontend routes
 ]
 
 # Serve media files in development
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT
+    )

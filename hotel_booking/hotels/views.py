@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Avg
+from django.views.generic import ListView
+from django.shortcuts import render
 from .models import Hotel, Amenity, RoomType, Room, Review
 from .serializers import (
     HotelListSerializer, HotelDetailSerializer, AmenitySerializer,
@@ -143,3 +145,22 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Review.objects.all()
         return Review.objects.filter(is_approved=True)
+
+
+# Web Views for templates
+class HotelListView(ListView):
+    """
+    Web view for listing hotels.
+    """
+    model = Hotel
+    template_name = 'core/hotel_list.html'
+    context_object_name = 'hotels'
+    paginate_by = 12
+    
+    def get_queryset(self):
+        return Hotel.objects.filter(
+            is_active=True, 
+            is_deleted=False
+        ).annotate(
+            average_rating=Avg('reviews__rating')
+        ).order_by('-featured', '-created_at')
