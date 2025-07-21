@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Hotel Booking{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded">
+    <h1 class="display-4">Welcome to Hotel Booking</h1>
+    <p class="lead">Find the perfect accommodation for your next trip.</p>
+    <hr class="my-4">
+    <p>Browse our selection of hotels and book your stay today.</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Browse Hotels</a>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-search me-2"></i>Search</h5>
+                <p class="card-text">Search for hotels based on your preferences, including location, price, and amenities.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-book me-2"></i>Book</h5>
+                <p class="card-text">Book your stay with our easy-to-use booking system. Secure payments and instant confirmation.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-suitcase me-2"></i>Enjoy</h5>
+                <p class="card-text">Enjoy your stay at one of our partner hotels. Quality service and comfortable accommodations.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2 class="mb-4">Featured Hotels</h2>
+    <div class="row">
+        <!-- This section would typically be populated with actual hotel data -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Hotel Image">
+                <div class="card-body">
+                    <h5 class="card-title">Luxury Hotel</h5>
+                    <p class="card-text">Experience luxury at its finest with our premium accommodations.</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Downtown</p>
+                    <p><strong>$200</strong> / night</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Hotel Image">
+                <div class="card-body">
+                    <h5 class="card-title">Beachfront Resort</h5>
+                    <p class="card-text">Enjoy stunning ocean views and direct beach access.</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Beachside</p>
+                    <p><strong>$250</strong> / night</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Hotel Image">
+                <div class="card-body">
+                    <h5 class="card-title">Mountain Retreat</h5>
+                    <p class="card-text">Escape to the mountains with our cozy cabins and breathtaking views.</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Mountain Range</p>
+                    <p><strong>$180</strong> / night</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

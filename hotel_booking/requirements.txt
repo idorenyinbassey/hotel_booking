@@ -1,0 +1,45 @@
+# Core dependencies
+Django==4.2.7  # Django web framework
+asgiref==3.7.2  # ASGI utilities for Django
+django-csp==3.7  # Content Security Policy support
+django-environ==0.11.2  # Environment variable configuration
+django-redis==5.4.0  # Redis cache backend for Django
+pillow==10.1.0  # Python Imaging Library for image processing
+sqlparse==0.4.4  # SQL parsing library for Django
+tzdata==2023.3  # Timezone database
+
+# API and serialization
+djangorestframework==3.14.0  # Django REST framework for APIs
+django-filter==23.3  # Advanced filtering for Django and DRF
+django-cors-headers==4.3.0  # Cross-Origin Resource Sharing headers
+
+# Database adapters
+psycopg2-binary==2.9.9  # PostgreSQL adapter
+
+# Caching and performance
+redis==5.0.1  # Redis client
+
+# Production WSGI server
+gunicorn==21.2.0  # Python WSGI HTTP Server for UNIX
+
+# Security and authentication
+django-oauth-toolkit==2.3.0  # OAuth2 provider for Django
+
+# Monitoring and debugging (development)
+django-extensions==3.2.3  # Additional Django extensions
+
+# Testing and debugging
+pytest==7.4.3  # Test runner
+pytest-cov==4.1.0  # Coverage plugin for pytest
+pytest-django==4.7.0  # Django integration for pytest
+coverage==7.3.2  # Code coverage measurement tool
+
+# System monitoring
+psutil==5.9.6  # System and process utilities
+requests==2.31.0  # HTTP library for external requests
+
+# PDF generation
+reportlab==4.0.7  # PDF generation library for reports and documents
+
+# Development tools
+colorama==0.4.6  # Colored terminal output

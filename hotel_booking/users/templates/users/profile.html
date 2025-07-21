@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card shadow mb-4">
+                <div class="card-body text-center">
+                    {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="{{ user.full_name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <img src="/static/images/default-profile.png" alt="{{ user.full_name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                    <h4>{{ user.full_name }}</h4>
+                    <p class="text-muted">{{ user.get_user_type_display }}</p>
+                    
+                    {% if user.profile.loyalty_level %}
+                    <div class="mt-3">
+                        <span class="badge bg-primary">{{ user.profile.loyalty_level|title }} Member</span>
+                        <p class="mt-2 mb-0">{{ user.profile.loyalty_points }} Points</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="list-group shadow">
+                <a href="#personal-info" class="list-group-item list-group-item-action active" data-bs-toggle="list">Personal Information</a>
+                <a href="#profile-details" class="list-group-item list-group-item-action" data-bs-toggle="list">Profile Details</a>
+                <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">Security</a>
+                {% if user.is_customer %}
+                <a href="#bookings" class="list-group-item list-group-item-action" data-bs-toggle="list">My Bookings</a>
+                {% endif %}
+                {% if user.is_hotel_manager %}
+                <a href="#hotel" class="list-group-item list-group-item-action" data-bs-toggle="list">Hotel Management</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Personal Information -->
+                <div class="tab-pane fade show active" id="personal-info">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Personal Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'update_personal_info' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                {% if messages %}
+                                <div class="alert alert-success">
+                                    {% for message in messages %}
+                                    {{ message }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="{{ user_form.first_name.id_for_label }}">First Name:</label>
+                                            {{ user_form.first_name|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="{{ user_form.last_name.id_for_label }}">Last Name:</label>
+                                            {{ user_form.last_name|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.email.id_for_label }}">Email:</label>
+                                    {{ user_form.email|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.phone_number.id_for_label }}">Phone Number:</label>
+                                    {{ user_form.phone_number|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.address.id_for_label }}">Address:</label>
+                                    {{ user_form.address|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.profile_picture.id_for_label }}">Profile Picture:</label>
+                                    {{ user_form.profile_picture|add_class:"form-control" }}
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Details -->
+                <div class="tab-pane fade" id="profile-details">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Profile Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'update_profile' %}">
+                                {% csrf_token %}
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.date_of_birth.id_for_label }}">Date of Birth:</label>
+                                    {{ profile_form.date_of_birth|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.bio.id_for_label }}">Bio:</label>
+                                    {{ profile_form.bio|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.preferences.id_for_label }}">Preferences:</label>
+                                    {{ profile_form.preferences|add_class:"form-control" }}
+                                    <small class="form-text text-muted">Enter your preferences in JSON format, e.g., {"theme": "dark", "notifications": true}</small>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Security</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'change_password' %}">
+                                {% csrf_token %}
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ password_form.old_password.id_for_label }}">Current Password:</label>
+                                    {{ password_form.old_password|add_class:"form-control" }}
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ password_form.new_password1.id_for_label }}">New Password:</label>
+                                    {{ password_form.new_password1|add_class:"form-control" }}
+                                    <small class="form-text text-muted">{{ password_form.new_password1.help_text }}</small>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="{{ password_form.new_password2.id_for_label }}">Confirm New Password:</label>
+                                    {{ password_form.new_password2|add_class:"form-control" }}
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Change Password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Bookings (for customers) -->
+                {% if user.is_customer %}
+                <div class="tab-pane fade" id="bookings">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">My Bookings</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if bookings %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking #</th>
+                                            <th>Hotel</th>
+                                            <th>Check-in</th>
+                                            <th>Check-out</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for booking in bookings %}
+                                        <tr>
+                                            <td>{{ booking.booking_number }}</td>
+                                            <td>{{ booking.hotel.name }}</td>
+                                            <td>{{ booking.check_in_date }}</td>
+                                            <td>{{ booking.check_out_date }}</td>
+                                            <td>
+                                                <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'pending' %}bg-warning{% elif booking.status == 'cancelled' %}bg-danger{% else %}bg-info{% endif %}">
+                                                    {{ booking.get_status_display }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'booking_detail' booking.id %}" class="btn btn-sm btn-primary">View</a>
+                                                {% if booking.status == 'pending' or booking.status == 'confirmed' %}
+                                                <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-sm btn-danger">Cancel</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info">
+                                <p>You don't have any bookings yet.</p>
+                                <a href="{% url 'hotel_list' %}" class="btn btn-primary mt-2">Book a Hotel</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Hotel Management (for hotel managers) -->
+                {% if user.is_hotel_manager %}
+                <div class="tab-pane fade" id="hotel">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Hotel Management</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if user.hotel %}
+                            <h5>{{ user.hotel.name }}</h5>
+                            <p>{{ user.hotel.description|truncatewords:30 }}</p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="card text-center mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total Rooms</h5>
+                                            <p class="card-text display-4">{{ user.hotel.total_rooms }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card text-center mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Active Bookings</h5>
+                                            <p class="card-text display-4">{{ active_bookings_count }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card text-center mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Rating</h5>
+                                            <p class="card-text display-4">{{ user.hotel.average_rating|floatformat:1 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                                <a href="{% url 'hotel_detail' user.hotel.id %}" class="btn btn-primary">View Hotel</a>
+                                <a href="{% url 'hotel_edit' user.hotel.id %}" class="btn btn-secondary">Edit Hotel</a>
+                                <a href="{% url 'hotel_bookings' user.hotel.id %}" class="btn btn-info">Manage Bookings</a>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                <p>You are not associated with any hotel yet.</p>
+                                <a href="{% url 'hotel_create' %}" class="btn btn-primary mt-2">Create Hotel</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
